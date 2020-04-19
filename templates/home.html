@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block inline_head %}
+
+<style>
+.AddImage{
+	width: 30%;
+	height: 100%;
+	display: inline-block;
+	float: left;
+	margin-right: 10px;
+	position: relative;
+	border: dashed #92586e 1px;
+	text-align: center;
+	line-height: 94px;
+	font-size: 30px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+.AddImage input[type="file"] {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    left: 0;
+    z-index: 999;
+    top: 0;
+}
+.display_none{
+	display: none
+}
+
+.list-group span{
+	font-weight: bold;
+}
+.disabled{
+	opacity: 0.3 !important
+}
+
+.pagination li{
+	display: inline-block;
+	margin: 10px
+}
+.input-group{
+	width: 95%
+}
+
+</style>
+
+
+{% endblock %}
+
+
+{% block content %}
+	
+	<div id="container">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		  <a class="navbar-brand" href="/">Home</a>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarNav">
+		    <ul class="navbar-nav">
+		      <li class="nav-item active">
+		        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Import File</a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" href="/logout">Logout</a>
+		      </li>
+		    </ul>
+		  </div>
+		</nav>
+
+		<hr>
+		
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+			  <thead class="thead-dark">
+			    <tr>
+			      {% for item in keys %}
+					<th scope="col">{{item}}</th>
+				  {% endfor %}
+				  <th scope="col"> </th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{% for item in values %}
+					<tr>
+						{% for subItem in keys %}
+				    		<td>{{item[subItem]}}</td>  
+				    	{% endfor %}
+				    		<td><a href="/blank?id={{item['id']}}" target="_blank" type="button" class="btn btn-primary">Invoice</a></td>
+				    </tr>
+				{% endfor %}
+			  </tbody>
+			</table>
+		</div>
+
+
+
+		<nav aria-label="Page navigation example">{{ pagination.links }}</nav>
+
+	</div>
+
+<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+  	<form method="post" enctype="multipart/form-data" action="/importFile" onsubmit="return My.formSubmit(this, true)" target="_blank">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      <div class="row">
+	      	<div class="col col-sm-12">
+	      		<div class="input-group input-group-sm mb-3">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text" id="inputGroup-sizing-sm">custommerID</span>
+				  </div>
+				  <input type="text" name="custommerID" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+				<div class="input-group input-group-sm mb-3">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text" id="inputGroup-sizing-sm">Customer Name</span>
+				  </div>
+				  <input type="text" name="name" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+				<div class="input-group input-group-sm mb-3">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text" id="inputGroup-sizing-sm">Customer Email</span>
+				  </div>
+				  <input type="email" class="form-control" name="email" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+				</div>
+				<div class="input-group input-group-sm mb-3">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text" id="inputGroup-sizing-sm">Phone</span>
+				  </div>
+				  <input type="text" class="form-control" aria-label="Small" name="phone" aria-describedby="inputGroup-sizing-sm">
+				</div>
+
+	      	</div>
+	      	<div class="col col-sm-6">
+	       		<div class="input-group input-group-sm mb-3">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text" id="inputGroup-sizing-sm">Address</span>
+				  </div>
+				  <input type="text" class="form-control" aria-label="Small" name="address" aria-describedby="inputGroup-sizing-sm">
+				</div>
+				
+			</div>
+			<div class="col-sm-6">
+				<div class="input-group input-group-sm mb-3">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text" id="inputGroup-sizing-sm">Remarks</span>
+				  </div>
+				  <input type="text" class="form-control" aria-label="Small" name="remarks" aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="input-group input-group-sm mb-3">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text" id="inputGroup-sizing-sm">taxRate %</span>
+				  </div>
+				  <input type="text" class="form-control" aria-label="Small" name="taxRate" aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="input-group input-group-sm mb-3">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text" id="inputGroup-sizing-sm">Category</span>
+				  </div>
+				  <input type="text" class="form-control" aria-label="Small" name="category" aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+			
+		   </div>
+	       <div class="row imageRow">
+	       		<div class="col col-sm-12">
+	       			<div class="AddImage">
+						<input type="file" name="uploadFile" accept=".xls,.xlsx" onchange="My.uploadImages(event)"><i class="fa fa-plus">import</i>
+			        </div>
+					<ul class="list-group display_none">
+					  <li class="list-group-item">size: <span class="size"></span></li>
+					  <li class="list-group-item">ext:  <span class="ext"></span></li>
+					  <li class="list-group-item">name: <span class="name"></span></li>
+					</ul> 
+	       		</div>
+		    </div>
+	        
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="submit" class="sendButton btn btn-primary disabled">Send</button>
+	      </div>
+	    </div>
+	</form>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

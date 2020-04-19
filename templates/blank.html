@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block inline_head %}
+
+<style>
+.invoice-title h2, .invoice-title h3 {
+    display: inline-block;
+}
+
+.table > tbody > tr > .no-line {
+    border-top: none;
+}
+
+.table > thead > tr > .no-line {
+    border-bottom: none;
+}
+
+.table > tbody > tr > .thick-line {
+    border-top: 2px solid;
+}
+
+.toPDF{
+	float: left
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+	{% if not request.args.get('pdf') %}
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  </button>
+	  <div class="collapse navbar-collapse" id="navbarNav">
+	    <ul class="navbar-nav">
+	      <li class="nav-item active">
+	        <a class="nav-link" href="/toPDF?id={{invoice.id}}">toPDF2</a>
+	      </li>
+	    </ul>
+	  </div>
+	</nav>
+	{% endif %}
+<div class="container">
+
+
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+    		<div class="invoice-title">
+    			<h2>Invoice</h2><h3 class="pull-right">Order # {{invoice.id * 99}}</h3>
+    		</div>
+    		<hr>
+    		<div class="row">
+    			<div class="col-sm-6">
+    				<address>
+    					{{invoice.custommerID}}<br>
+    					
+    					{{invoice.address}}<br>
+    					{{invoice.category}}<br>
+    				</address>
+    			</div>
+    			<div class="col-sm-6 text-right">
+    				<address>
+    					{{invoice.phone}}<br>
+    					
+    					{{invoice.remarks}}<br>
+    					{{invoice.taxRate}}<br>
+    				</address>
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="col-sm-6">
+    				<address>
+    					{{invoice.name}}<br>
+    					{{invoice.email}}
+    				</address>
+    			</div>
+    			<div class="col-sm-6 text-right">
+    				<address>
+    					<strong>Order Date:</strong><br>
+    					{{invoice['.insert_date']}}<br><br>
+    				</address>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-md-12">
+    		<div class="panel panel-default">
+    			<div class="panel-heading">
+    				<h3 class="panel-title"><strong>Order summary</strong></h3>
+    			</div>
+    			<div class="panel-body">
+    				<div class="table-responsive">
+    					<table class="table table-condensed">
+    						<thead>
+                                <tr>
+        							{% for item in keys %}
+										<td class="text-center"><strong>{{item}}</strong></td>
+									 {% endfor %}
+                                </tr>
+    						</thead>
+    						<tbody>
+    							{% for item in values %}
+									<tr>
+										{% for subItem in keys %} 
+								    		<td class="text-center">{{item[subItem]}}</td>
+								    	{% endfor %}
+								    </tr>
+								{% endfor %}
+								<tr>
+									<td colspan="{{keys|length - 2}}" class="no-line"></td>
+    								<td class="thick-line text-right"><strong>Total Price</strong></td>
+    								<td class="thick-line text-right">{{invoice.sellingPrice}}</td>
+    							</tr>
+    							<tr>
+    								<td colspan="{{keys|length - 2}}" class="no-line"></td>
+    								<td class="no-line text-right"><strong>Quantity</strong></td>
+    								<td class="no-line text-right">{{invoice.quantity}}</td>
+    							</tr>
+    						</tbody>
+    					</table>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+</div>
+
+
+
+{% endblock %}
